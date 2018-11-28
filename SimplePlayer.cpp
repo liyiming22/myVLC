@@ -24,9 +24,6 @@ SimplePlayer::SimplePlayer(QWidget *parent)
     connect(ui->action_mute, &QAction::triggered, this, &SimplePlayer::toggleMute);
     connect(ui->action_list, &QAction::triggered, this, &SimplePlayer::showList);
 
-
-
-
     connect(ui->pause, &QPushButton::clicked, this, &SimplePlayer::toggle_play_state);
     connect(ui->pause, &QPushButton::clicked, this, &SimplePlayer::debugTest);
     connect(ui->fullButton, &QPushButton::clicked, this, &SimplePlayer::signal_set_full_screen);

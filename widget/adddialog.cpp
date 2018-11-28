@@ -81,16 +81,6 @@ void addDialog::importFromFile()
                                          "/home/yeoman",
                                          "Multimedia files(*)");
     if (0 == fileList.length()) return;
-    for ( int i = 0; i < fileList.length(); ++i ) {
-        QString fileName = fileList.at(i);
-        int temp = fileName.lastIndexOf('/');
-        fileName = fileName.mid(temp + 1);
-        temp = fileName.lastIndexOf('.');
-        fileName.truncate(temp);
-        qDebug() << fileList.at(i) << endl;
-        qDebug() << fileName << endl;
-//        addGroupOrChannel(fileName, fileList.at(i));
-        emit addGroupOrChannel(fileName, fileList.at(i));
-    }
+    emit addFromFile(fileList);
     this->close();
 }
