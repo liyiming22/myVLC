@@ -30,6 +30,7 @@ public slots:
 
     void selectChannel(QTreeWidgetItem *, int);
     void addGroupOrChannel(QString, QString);
+    void addFromFile(QStringList);
     void delGroupOrChannel();
 
 private:

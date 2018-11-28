@@ -49,6 +49,8 @@ System::System(QObject *parent) : QObject(parent)
     connect(fullForm, &fullDialog::seekSlider_moved, this, &System::seekSlider_moved);
     connect(fullForm, &fullDialog::seekSlider_released, this, &System::seekSlider_released);
     connect(fullForm, &fullDialog::volumeSlider_changed, this, &System::setVolume);
+    connect(fullForm, &fullDialog::leftClick, this, &System::btnLeftClick);
+    connect(fullForm, &fullDialog::rightClick, this, &System::btnRightClick);
 
     connect(listForm, &listDialog::listPlay, this, &System::listPlay);
 
@@ -95,6 +97,7 @@ void System::changeChannel(bool isNext)
     currentMediaIndex = isNext? nextMediaIndex:preMediaIndex;
     initPlayer();
     _player->open(_mediaList->at(currentMediaIndex));
+//    _fullPlayer->open(_mediaList->at(currentMediaIndex));
 //    updateNextandPre();
 }
 
@@ -103,6 +106,7 @@ void System::changePos(bool isNext)
     qDebug() << "changePos" << isNext << endl;
     double step = isNext? 0.01:-0.01;
     _player->setPosition(_player->position() + step);
+    _fullPlayer->setPosition(_fullPlayer->position() + step);
 }
 
 void System::takeSnapShot()
@@ -137,7 +141,6 @@ void System::updateNextandPre()
         case Loop:
             nextMediaIndex = (currentMediaIndex + 1) % _mediaList->count();
             preMediaIndex = currentMediaIndex;
-//            isLoop = true;
             break;
         case Repeat:
             nextMediaIndex = currentMediaIndex;
@@ -149,7 +152,6 @@ void System::updateNextandPre()
         case Order:
             nextMediaIndex = (currentMediaIndex + 1) % _mediaList->count();
             preMediaIndex = currentMediaIndex;
-//            isLoop = false;
             break;
         default:
             break;
@@ -207,6 +209,7 @@ void System::listPlay(ChannelGroup *group, int index)
 void System::toggle_play_state()
 {
     _player->togglePause();
+    _fullPlayer->togglePause();
 }
 
 void System::video_form_changeSeek()
@@ -257,7 +260,7 @@ void System::updateDuration()
     hours = (thisTime / 3600000) % 24;
     QTime currenTime(hours, minutes, seconds);
     videoForm->updateDurationLabel(1, currenTime);
-    fullForm->updateDurationLabel(1, time);
+    fullForm->updateDurationLabel(1, currenTime);
 }
 
 void System::slot_set_full_screen()

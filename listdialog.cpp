@@ -23,6 +23,7 @@ listDialog::listDialog(QWidget *parent) :
     connect(ui->removeButton, &QPushButton::clicked, this, &listDialog::delGroupOrChannel);
 
     connect(addWidget, &addDialog::addGroupOrChannel, this, &listDialog::addGroupOrChannel);
+    connect(addWidget, &addDialog::addFromFile, this, &listDialog::addFromFile);
 }
 
 listDialog::~listDialog()
@@ -78,25 +79,21 @@ void listDialog::selectChannel(QTreeWidgetItem *item, int index)
 
 void listDialog::addGroupOrChannel(QString name, QString address)
 {
-    if (address.isEmpty())
-    {
+    if (address.isEmpty()) {
         ChannelGroup *group = new ChannelGroup();
         group->setName(name);
         currentList->addGroup(group);
 
         refreshList();
     }
-    else
-    {
+    else {
         Channel *channel = new Channel(name, address);
         QTreeWidgetItem *item = ui->treeWidget->currentItem();
-        if (item == NULL)
-        {
+        if (item == NULL) {
             ChannelGroup *group = currentList->getGroup(0);
             group->addChannel(channel);
         }
-        else
-        {
+        else {
             if (item->parent())
                 item = item->parent();
             QString groupName = item->text(0);
@@ -106,6 +103,30 @@ void listDialog::addGroupOrChannel(QString name, QString address)
                     group = currentList->getGroup(i);
             group->addChannel(channel);
         }
+    }
+    refreshList();
+}
+
+void listDialog::addFromFile(QStringList fileList)
+{
+    QTreeWidgetItem * item = ui->treeWidget->currentItem();
+    ChannelGroup * group;
+    if (item == NULL)   group = currentList->getGroup(0);
+    else {
+        if (item->parent()) item = item->parent();
+        QString groupName = item->text(0);
+        for (int i = 0; i < currentList->count(); ++i)
+            if (currentList->getGroup(i)->getName() == groupName)
+                group = currentList->getGroup(i);
+    }
+    for (int i = 0; i < fileList.length(); ++i) {
+        QString fileName = fileList.at(i);
+        int temp = fileName.lastIndexOf('/');
+        fileName = fileName.mid(temp + 1);
+        temp = fileName.lastIndexOf('.');
+        fileName.truncate(temp);
+        Channel *channel = new Channel(fileName, fileList.at(i));
+        group->addChannel(channel);
     }
     refreshList();
 }

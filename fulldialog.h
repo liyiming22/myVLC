@@ -6,6 +6,7 @@
 #include <QMouseEvent>
 #include <QPropertyAnimation>
 #include <QTime>
+#include <QDebug>
 #include <unistd.h>
 
 namespace Ui {
@@ -43,6 +44,8 @@ signals:
     void seekSlider_moved(int);
     void seekSlider_released();
     void volumeSlider_changed(int);
+    void leftClick(bool);
+    void rightClick(bool);
 
     void signal_set_normal_screen();
 

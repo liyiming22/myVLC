@@ -21,6 +21,9 @@ fullDialog::fullDialog(QWidget *parent) :
     ui->fullButton->setFlat(true);
     ui->lastButton->setFlat(true);
 
+    ui->nextButton->installEventFilter(this);
+    ui->lastButton->installEventFilter(this);
+
 
 
     isHide = true;
@@ -33,13 +36,13 @@ fullDialog::fullDialog(QWidget *parent) :
     ui->displayWidget->setGeometry(0, 0, fWidth, fHeight);
     ui->ctrlWidget->setGeometry(0, fHeight - 1, fWidth, ctrlHeight);
 
-    int objectY = (ui->ctrlWidget->height() - ui->lastButton->height()) / 2;
+/*    int objectY = (ui->ctrlWidget->height() - ui->lastButton->height()) / 2;
     int objectW = ui->lastButton->width();
     int space = (this->width() - objectW * 5) / 15;
     ui->lastButton->move(space * 5, objectY);
     ui->playButton->move(space * 6 + objectW, objectY);
     ui->nextButton->move(space * 7 + objectW * 2, objectY);
-    ui->fullButton->move(space * 10 + objectW * 4, objectY);
+    ui->fullButton->move(space * 10 + objectW * 4, objectY);*/
 
     /*------signals and slots------*/
     connect(ui->fullButton, &QPushButton::clicked, this, &fullDialog::signal_set_normal_screen);
@@ -98,6 +101,14 @@ bool fullDialog::eventFilter(QObject *target, QEvent *event)
 //                sleep(0.2);
                 isHide = true;
             }
+        }
+    }
+    else if (event->type()==QEvent::MouseButtonPress) {
+        if (target == ui->nextButton || target == ui->lastButton) {
+            bool isNext = target == ui->nextButton;
+            QMouseEvent *ev = (QMouseEvent*)event;
+            if (ev->button() == Qt::LeftButton) emit leftClick(isNext);
+            else    emit rightClick(isNext);
         }
     }
     return QDialog::eventFilter(target, event);
