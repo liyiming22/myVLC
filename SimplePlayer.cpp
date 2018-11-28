@@ -77,9 +77,6 @@ void SimplePlayer::activeSlider()
 void SimplePlayer::mouseDoubleClickEvent(QMouseEvent* event)
 {
     //if(event->button()==Qt::LeftButton)
-
-
-
 }
 
 bool SimplePlayer::eventFilter(QObject * target, QEvent * event)
