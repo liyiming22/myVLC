@@ -1,0 +1,16 @@
+<RCC>
+    <qresource prefix="/new/player of icon">
+        <file>image/播放.ico</file>
+        <file>image/全屏.ico</file>
+        <file>image/停止.ico</file>
+        <file>image/下一个.ico</file>
+        <file>image/右.ico</file>
+        <file>image/左.ico</file>
+        <file>image/暂停.ico</file>
+        <file>image/列表.ico</file>
+        <file>image/截图.ico</file>
+        <file>image/顺序播放.ico</file>
+        <file>image/音量.ico</file>
+        <file>image/静音.ico</file>
+    </qresource>
+</RCC>
