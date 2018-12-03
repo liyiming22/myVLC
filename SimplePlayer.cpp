@@ -14,9 +14,12 @@ SimplePlayer::SimplePlayer(QWidget *parent)
     ui->volumeSlider->setEnabled(false);
     ui->CurrentTimeLabel->setText("--:--:--");
     ui->MediaDurationLabel->setText("--:--:--");
+    QIcon icon(":/new/player of icon/image/播放.ico");
+    ui->pause->setIcon(icon);
     ui->btnNext->installEventFilter(this);
     ui->btnPrevious->installEventFilter(this);
     connect(ui->actionOpenLocal, &QAction::triggered, this, &SimplePlayer::open_local_files);
+    connect(ui->actionOpenUrl, &QAction::triggered, this, &SimplePlayer::open_url);
     connect(ui->actionPause, &QAction::triggered, this, &SimplePlayer::toggle_play_state);
     connect(ui->actionAbout, &QAction::triggered, aboutWidget, &aboutDialog::show);
     connect(ui->actionsnapshut, &QAction::triggered, this, &SimplePlayer::takeSnapShot);
@@ -71,9 +74,23 @@ void SimplePlayer::activeSlider()
     ui->volumeSlider->setEnabled(true);
 }
 
-void SimplePlayer::mouseDoubleClickEvent(QMouseEvent* event)
+void SimplePlayer::changePlayIcon(bool isPlaying)
 {
-    //if(event->button()==Qt::LeftButton)
+    if (isPlaying) {
+        QIcon icon(":/new/player of icon/image/暂停.ico");
+        ui->pause->setIcon(icon);
+    }
+    else {
+        QIcon icon(":/new/player of icon/image/播放.ico");
+        ui->pause->setIcon(icon);
+    }
+}
+
+void SimplePlayer::changeModeIcon(QString mode)
+{
+    QString iconPath = ":/new/player of icon/image/" + mode + ".ico";
+    QIcon icon(iconPath);
+    ui->modeButton->setIcon(icon);
 }
 
 bool SimplePlayer::eventFilter(QObject * target, QEvent * event)

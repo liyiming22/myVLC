@@ -46,10 +46,12 @@ signals:
     void volumeSlider_changed(int);
     void leftClick(bool);
     void rightClick(bool);
-
     void signal_set_normal_screen();
 
     void debugTest();
+
+public slots:
+    void changePlayIcon(bool);
 };
 
 #endif // FULLDIALOG_H

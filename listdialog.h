@@ -4,6 +4,13 @@
 #include <QDialog>
 #include <QDebug>
 #include <QTreeWidgetItem>
+#include <QFileDialog>
+#include <QTextCodec>
+
+#include <dirent.h>
+#include <unistd.h>
+#include <sys/stat.h>
+
 #include "modules/grouplist.h"
 #include "widget/adddialog.h"
 
@@ -19,6 +26,7 @@ public:
     explicit listDialog(QWidget *parent = 0);
     ~listDialog();
     void refreshList();
+    void dfsFiles(const char * dirPath, QStringList & fileList);
 
 signals:
 //    void listPlay(QString, QString);
@@ -32,6 +40,7 @@ public slots:
     void addGroupOrChannel(QString, QString);
     void addFromFile(QStringList);
     void delGroupOrChannel();
+    void debug();
 
 private:
     Ui::listDialog *ui;

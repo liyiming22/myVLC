@@ -30,7 +30,8 @@ public:
 public slots:
     void updateDurationLabel(int type, QTime time);
     void activeSlider();
-    void mouseDoubleClickEvent(QMouseEvent* event);
+    void changePlayIcon(bool);
+    void changeModeIcon(QString);
 
 private:
     Ui::SimplePlayer *ui;
@@ -46,6 +47,7 @@ protected:
 
 signals:
     void open_local_files();
+    void open_url();
     void toggle_play_state();
     void seekSlider_clicked(double);
     void seekSlider_moved(int);

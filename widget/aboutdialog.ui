@@ -47,8 +47,8 @@
   <widget class="QLabel" name="icoLabel">
    <property name="geometry">
     <rect>
-     <x>15</x>
-     <y>60</y>
+     <x>11</x>
+     <y>54</y>
      <width>90</width>
      <height>90</height>
     </rect>
@@ -57,7 +57,7 @@
     <string/>
    </property>
    <property name="pixmap">
-    <pixmap>:/图片/steamWorld.png</pixmap>
+    <pixmap resource="../image.qrc">:/new/player of icon/image/vlc-qt.png</pixmap>
    </property>
    <property name="scaledContents">
     <bool>true</bool>
@@ -162,6 +162,8 @@
    </property>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="../image.qrc"/>
+ </resources>
  <connections/>
 </ui>

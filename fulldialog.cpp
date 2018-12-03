@@ -1,7 +1,6 @@
 #include "fulldialog.h"
 #include "ui_fulldialog.h"
 
-
 fullDialog::fullDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::fullDialog)
@@ -20,6 +19,9 @@ fullDialog::fullDialog(QWidget *parent) :
     ui->playButton->setFlat(true);
     ui->fullButton->setFlat(true);
     ui->lastButton->setFlat(true);
+
+    QIcon icon(":/new/player of icon/image/播放.ico");
+    ui->playButton->setIcon(icon);
 
     ui->nextButton->installEventFilter(this);
     ui->lastButton->installEventFilter(this);
@@ -46,6 +48,7 @@ fullDialog::fullDialog(QWidget *parent) :
 
     /*------signals and slots------*/
     connect(ui->fullButton, &QPushButton::clicked, this, &fullDialog::signal_set_normal_screen);
+    connect(ui->playButton, &QPushButton::clicked, this, &fullDialog::toggle_play_state);
 
     connect(ui->seekSlider, &CustomSeekSlider::seekSliderClicked, this, &fullDialog::seekSlider_clicked);
     connect(ui->seekSlider, &CustomSeekSlider::sliderMoved, this, &fullDialog::seekSlider_moved);
@@ -76,6 +79,18 @@ void fullDialog::updateDurationLabel(int type, QTime time)
 void fullDialog::changeSeek(float pos)
 {
     ui->seekSlider->setValue(pos * MAXVALUE);
+}
+
+void fullDialog::changePlayIcon(bool isPlaying)
+{
+    if (isPlaying) {
+        QIcon icon(":/new/player of icon/image/暂停.ico");
+        ui->playButton->setIcon(icon);
+    }
+    else {
+        QIcon icon(":/new/player of icon/image/播放.ico");
+        ui->playButton->setIcon(icon);
+    }
 }
 
 bool fullDialog::eventFilter(QObject *target, QEvent *event)
