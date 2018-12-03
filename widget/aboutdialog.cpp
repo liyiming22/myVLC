@@ -7,7 +7,7 @@ aboutDialog::aboutDialog(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    connect(ui->pushButton, SIGNAL(clicked(bool)), this, SLOT(hide()));
+    connect(ui->pushButton, &QAbstractButton::clicked, this, &QWidget::hide);
 }
 
 aboutDialog::~aboutDialog()

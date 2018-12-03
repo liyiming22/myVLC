@@ -9,6 +9,9 @@ listDialog::listDialog(QWidget *parent) :
 //    setWindowFlags(Qt::Tool | Qt::FramelessWindowHint);
 //    setAttribute(Qt::WA_TranslucentBackground);
 
+    mediaFormat << "mp3" << "wav" << "mp4" << "3gp" << "webm"
+                << "mkv" << "avi";
+
     currentList = new GroupList();
     QTextCodec::setCodecForLocale(QTextCodec::codecForName("GBK"));
 
@@ -22,7 +25,7 @@ listDialog::listDialog(QWidget *parent) :
     connect(ui->treeWidget, &QTreeWidget::itemDoubleClicked, this, &listDialog::selectChannel);
     connect(ui->addButton, &QPushButton::clicked, addWidget, &addDialog::show);
     connect(ui->removeButton, &QPushButton::clicked, this, &listDialog::delGroupOrChannel);
-    connect(ui->debugButton, &QPushButton::clicked, this, &listDialog::debug);
+    connect(ui->scanButton, &QPushButton::clicked, this, &listDialog::scanDirectory);
 
     connect(addWidget, &addDialog::addGroupOrChannel, this, &listDialog::addGroupOrChannel);
     connect(addWidget, &addDialog::addFromFile, this, &listDialog::addFromFile);
@@ -132,18 +135,22 @@ void listDialog::delGroupOrChannel()
     qDebug() << "delete" << endl;
 }
 
-void listDialog::addFromFile(QStringList fileList)
+void listDialog::addFromFile(QStringList fileList, QString groupName)
 {
-    QTreeWidgetItem * item = ui->treeWidget->currentItem();
     ChannelGroup * group;
-    if (item == NULL)   group = currentList->getGroup(0);
+    if (!groupName.isEmpty())
+        addGroupOrChannel(groupName, "");
+    QString tempStr;
+    QTreeWidgetItem * item = ui->treeWidget->currentItem();
+    if (NULL == item)   tempStr = currentList->getGroup(0)->getName();
     else {
-        if (item->parent()) item = item->parent();
-        QString groupName = item->text(0);
-        for (int i = 0; i < currentList->count(); ++i)
-            if (currentList->getGroup(i)->getName() == groupName)
-                group = currentList->getGroup(i);
+        item = item->parent()? item->parent() : item;
+        tempStr = item->text(0);
     }
+    groupName = groupName.isEmpty()? tempStr : groupName;
+    for (int i = 0; i < currentList->count(); ++i)
+        if (currentList->getGroup(i)->getName() == groupName)
+            group = currentList->getGroup(i);
     for (int i = 0; i < fileList.length(); ++i) {
         QString fileName = fileList.at(i);
         int temp = fileName.lastIndexOf('/');
@@ -156,7 +163,7 @@ void listDialog::addFromFile(QStringList fileList)
     refreshList();
 }
 
-void listDialog::dfsFiles(const char *dirPath, QStringList & fileList)
+void listDialog::scanFiles(const char *dirPath, QStringList & fileList)
 {
     struct dirent * ent = NULL;
     DIR * pDir;
@@ -168,29 +175,30 @@ void listDialog::dfsFiles(const char *dirPath, QStringList & fileList)
         std :: string thisName(ent -> d_name);
         fullPath += thisName;
         if (8 == ent -> d_type) {
-            // file
             QString qsfullpath = QString :: fromStdString(fullPath);
-//            qDebug() << qsfullpath;
-            fileList.append(qsfullpath);
+            int temp = qsfullpath.lastIndexOf('.');
+            QString thisFormat = qsfullpath.mid(temp + 1);
+            if (mediaFormat.end() != mediaFormat.find(thisFormat))
+                fileList.append(qsfullpath);
         }
         else {
             if (strcmp(ent -> d_name, ".") == 0 || strcmp(ent -> d_name, "..") == 0)
                 continue;
-            // directory
-            dfsFiles(fullPath.c_str(), fileList);
+            scanFiles(fullPath.c_str(), fileList);
         }
     }
 }
 
-void listDialog::debug()
+void listDialog::scanDirectory()
 {
     QString qstr = QFileDialog::getExistingDirectory(this, "选择目录",
                                                     "/home/yeoman",
                                                     QFileDialog::ShowDirsOnly);
     std :: string str = qstr.toStdString();
     const char * dirPath = str.c_str();
-//    QByteArray ba = qstr.toLocal8Bit();
-//    char * dirPath = ba.data();
     QStringList fileList;
-    dfsFiles(dirPath, fileList);
+    scanFiles(dirPath, fileList);
+    int temp = qstr.lastIndexOf('/');
+    qstr = qstr.mid(temp + 1);
+    addFromFile(fileList, qstr);
 }

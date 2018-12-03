@@ -81,6 +81,6 @@ void addDialog::importFromFile()
                                          "/home/yeoman",
                                          "Multimedia files(*)");
     if (0 == fileList.length()) return;
-    emit addFromFile(fileList);
+    emit addFromFile(fileList, "");
     this->close();
 }
