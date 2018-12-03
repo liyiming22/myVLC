@@ -18,10 +18,10 @@ System::System(QObject *parent) : QObject(parent)
     preMediaIndex = 0;
     nextMediaIndex = 0;
     currentModeIndex = 0;
-//    isLoop = true;
     modeEnum = QMetaEnum::fromType<System::PlaybackMode>();
 
     connect(videoForm, &SimplePlayer::open_local_files, this, &System::openLocal);
+    connect(videoForm, &SimplePlayer::open_url, this, &System::openUrl);
     connect(videoForm, &SimplePlayer::toggle_play_state, this, &System::toggle_play_state);
     connect(videoForm, &SimplePlayer::debugTest, this, &System::debugTest);
     connect(videoForm, &SimplePlayer::signal_set_full_screen, this, &System::slot_set_full_screen);
@@ -43,6 +43,10 @@ System::System(QObject *parent) : QObject(parent)
     connect(videoForm, &SimplePlayer::modeChange, this, &System::updateNextandPre);
     connect(_player, &VlcMediaPlayer::opening, this, &System::updateNextandPre);
     connect(_player, &VlcMediaPlayer::end, this, &System::handleEnd);
+    connect(_player, &VlcMediaPlayer::paused, this, &System::normalFormChangeIcon);
+    connect(_player, &VlcMediaPlayer::playing, this, &System::normalFormChangeIcon);
+    connect(_fullPlayer, &VlcMediaPlayer::paused, this, &System::fullFormChangeIcon);
+    connect(_fullPlayer, &VlcMediaPlayer::playing, this, &System::fullFormChangeIcon);
 
     connect(fullForm, &fullDialog::signal_set_normal_screen, this, &System::slot_set_normal_screen);
     connect(fullForm, &fullDialog::seekSlider_clicked, this, &System::change_video_position);
@@ -51,6 +55,7 @@ System::System(QObject *parent) : QObject(parent)
     connect(fullForm, &fullDialog::volumeSlider_changed, this, &System::setVolume);
     connect(fullForm, &fullDialog::leftClick, this, &System::btnLeftClick);
     connect(fullForm, &fullDialog::rightClick, this, &System::btnRightClick);
+    connect(fullForm, &fullDialog::toggle_play_state, this, &System::toggle_play_state);
 
     connect(listForm, &listDialog::listPlay, this, &System::listPlay);
 
@@ -131,11 +136,11 @@ void System::updatePlayMode()
 {
     ++currentModeIndex;
     currentModeIndex %= modeEnum.keyCount();
+    videoForm->changeModeIcon(modeEnum.valueToKey(currentModeIndex));
 }
 
 void System::updateNextandPre()
 {
-    qDebug() << "update next and previous" << endl;
     PlaybackMode thisMode = PlaybackMode(currentModeIndex);
     switch (thisMode) {
         case Loop:
@@ -177,6 +182,18 @@ void System::handleEnd()
     else    changeChannel(true);
 }
 
+void System::normalFormChangeIcon()
+{
+    Vlc::State currentState = _player->state();
+    videoForm->changePlayIcon(Vlc::State::Playing == currentState);
+}
+
+void System::fullFormChangeIcon()
+{
+    Vlc::State currentState = _fullPlayer->state();
+    fullForm->changePlayIcon(Vlc::State::Playing == currentState);
+}
+
 void System::openLocal()
 {
     playList =
@@ -193,8 +210,22 @@ void System::openLocal()
     _player->open(_mediaList->at(currentMediaIndex));
 }
 
+void System::openUrl()
+{
+    QString url =
+            QInputDialog::getText(videoForm, tr("Open Url"), tr("Enter the URL you want to play"));
+
+    if (url.isEmpty())
+        return;
+    _media = new VlcMedia(url, _instance);
+    _mediaList->addMedia(_media);
+    initPlayer();
+    _player->open(_mediaList->at(currentMediaIndex));
+}
+
 void System::listPlay(ChannelGroup *group, int index)
 {
+    for ( int index = 0; index < _mediaList->count(); ++index ) _mediaList->removeMedia(index);
     for ( int index = 0; index < group->count(); ++index ) {
         _media = new VlcMedia(group->getChannel(index)->getAddress(), true, _instance);
         _mediaList->addMedia(_media);

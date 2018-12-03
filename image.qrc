@@ -12,5 +12,11 @@
         <file>image/顺序播放.ico</file>
         <file>image/音量.ico</file>
         <file>image/静音.ico</file>
+        <file>image/Loop.ico</file>
+        <file>image/Order.ico</file>
+        <file>image/Repeat.ico</file>
+        <file>image/Shuffle.ico</file>
+        <file>image/vlc.png</file>
+        <file>image/vlc-qt.png</file>
     </qresource>
 </RCC>

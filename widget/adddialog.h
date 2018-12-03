@@ -28,7 +28,7 @@ private:
 
 signals:
     void addGroupOrChannel(QString, QString);
-    void addFromFile(QStringList);
+    void addFromFile(QStringList, QString);
 
 private slots:
     void stationInvalid();

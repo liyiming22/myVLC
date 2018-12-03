@@ -4,6 +4,14 @@
 #include <QDialog>
 #include <QDebug>
 #include <QTreeWidgetItem>
+#include <QFileDialog>
+#include <QTextCodec>
+#include <QSet>
+
+#include <dirent.h>
+#include <unistd.h>
+#include <sys/stat.h>
+
 #include "modules/grouplist.h"
 #include "widget/adddialog.h"
 
@@ -19,6 +27,8 @@ public:
     explicit listDialog(QWidget *parent = 0);
     ~listDialog();
     void refreshList();
+    void scanFiles(const char * dirPath, QStringList & fileList);
+    QSet<QString> mediaFormat;
 
 signals:
 //    void listPlay(QString, QString);
@@ -30,8 +40,10 @@ public slots:
 
     void selectChannel(QTreeWidgetItem *, int);
     void addGroupOrChannel(QString, QString);
-    void addFromFile(QStringList);
+//    void addFromFile(QStringList);
+    void addFromFile(QStringList, QString);
     void delGroupOrChannel();
+    void scanDirectory();
 
 private:
     Ui::listDialog *ui;

@@ -163,7 +163,7 @@
         </property>
         <property name="icon">
          <iconset resource="image.qrc">
-          <normaloff>:/new/player of icon/image/暂停.ico</normaloff>:/new/player of icon/image/暂停.ico</iconset>
+          <normaloff>:/new/player of icon/image/播放.ico</normaloff>:/new/player of icon/image/播放.ico</iconset>
         </property>
         <property name="iconSize">
          <size>
@@ -305,7 +305,7 @@
      <x>0</x>
      <y>0</y>
      <width>523</width>
-     <height>20</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

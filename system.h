@@ -2,6 +2,7 @@
 #define SYSTEM_H
 
 #include <QFileDialog>
+#include <QInputDialog>
 #include <QDebug>
 #include <QTime>
 #include <QWidget>
@@ -16,6 +17,7 @@
 #include <VLCQtCore/MediaListPlayer.h>
 #include <VLCQtCore/Audio.h>
 #include <VLCQtCore/Video.h>
+#include <VLCQtCore/Enums.h>
 
 #include "modules/channelgroup.h"
 #include "SimplePlayer.h"
@@ -94,9 +96,10 @@ public slots:
     void updateNextandPre();
     void handleShuffle();
     void handleEnd();
-
+    void normalFormChangeIcon();
+    void fullFormChangeIcon();
     void debugTest();
-//    void openUrl();
+    void openUrl();
 };
 
 #endif // SYSTEM_H
