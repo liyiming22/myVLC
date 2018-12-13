@@ -5,7 +5,8 @@ listDialog::listDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::listDialog)
 {
-    ui->setupUi(this);
+   ui->setupUi(this);
+   setWindowFlags(Qt::FramelessWindowHint);
 //    setWindowFlags(Qt::Tool | Qt::FramelessWindowHint);
 //    setAttribute(Qt::WA_TranslucentBackground);
 
@@ -21,6 +22,10 @@ listDialog::listDialog(QWidget *parent) :
     refreshList();
 
     addWidget = new addDialog(this);
+
+    ui->addButton->setFlat(true);
+    ui->removeButton->setFlat(true);
+
 
     connect(ui->treeWidget, &QTreeWidget::itemDoubleClicked, this, &listDialog::selectChannel);
     connect(ui->addButton, &QPushButton::clicked, addWidget, &addDialog::show);
@@ -201,4 +206,15 @@ void listDialog::scanDirectory()
     int temp = qstr.lastIndexOf('/');
     qstr = qstr.mid(temp + 1);
     addFromFile(fileList, qstr);
+}
+
+void listDialog::mouseMoveEvent(QMouseEvent *event)
+{
+    this->move(event->globalPos()+ mLastMousePosition);
+
+}
+
+void listDialog::mousePressEvent(QMouseEvent *event)
+{
+    mLastMousePosition =this->pos()-event->globalPos();
 }

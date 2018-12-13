@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>618</width>
-    <height>380</height>
+    <width>1162</width>
+    <height>598</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,10 +16,10 @@
   <widget class="VlcWidgetVideo" name="displayWidget" native="true">
    <property name="geometry">
     <rect>
-     <x>130</x>
-     <y>40</y>
-     <width>331</width>
-     <height>211</height>
+     <x>0</x>
+     <y>0</y>
+     <width>1141</width>
+     <height>271</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -29,16 +29,18 @@
   <widget class="QWidget" name="ctrlWidget" native="true">
    <property name="geometry">
     <rect>
-     <x>120</x>
+     <x>0</x>
      <y>260</y>
-     <width>351</width>
-     <height>101</height>
+     <width>1151</width>
+     <height>321</height>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color: rgb(238, 238, 236);
+    <string notr="true">#ctrlWidget
+{
+background-image: url(:/new/player of icon/image/壁纸.jpg);
 setWindowOpacity:(0.7); 
-</string>
+}</string>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
@@ -57,27 +59,6 @@ setWindowOpacity:(0.7);
        </spacer>
       </item>
       <item>
-       <widget class="QLabel" name="CurrentTimeLabel">
-        <property name="text">
-         <string>TextLabel</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="CustomSeekSlider" name="seekSlider">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="MediaDurationLabel">
-        <property name="text">
-         <string>TextLabel</string>
-        </property>
-       </widget>
-      </item>
-      <item>
        <spacer name="horizontalSpacer_2">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -94,19 +75,6 @@ setWindowOpacity:(0.7);
     </item>
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
-      <item>
-       <spacer name="horizontalSpacer_3">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
       <item>
        <widget class="QPushButton" name="lastButton">
         <property name="focusPolicy">
@@ -177,6 +145,69 @@ setWindowOpacity:(0.7);
        </widget>
       </item>
       <item>
+       <widget class="QLabel" name="CurrentTimeLabel">
+        <property name="styleSheet">
+         <string notr="true">color:rgb(255, 255, 255);</string>
+        </property>
+        <property name="text">
+         <string>TextLabel</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="CustomSeekSlider" name="seekSlider">
+        <property name="minimumSize">
+         <size>
+          <width>1000</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="MediaDurationLabel">
+        <property name="styleSheet">
+         <string notr="true">color:rgb(255, 255, 255);</string>
+        </property>
+        <property name="text">
+         <string>TextLabel</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton">
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="image.qrc">
+          <normaloff>:/new/player of icon/image/音量.ico</normaloff>:/new/player of icon/image/音量.ico</iconset>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="CustomVolumeSlider" name="volumeSlider">
+        <property name="maximumSize">
+         <size>
+          <width>100</width>
+          <height>50</height>
+         </size>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="fullButton">
         <property name="focusPolicy">
          <enum>Qt::NoFocus</enum>
@@ -198,32 +229,6 @@ setWindowOpacity:(0.7);
          <bool>true</bool>
         </property>
        </widget>
-      </item>
-      <item>
-       <widget class="CustomVolumeSlider" name="volumeSlider">
-        <property name="maximumSize">
-         <size>
-          <width>100</width>
-          <height>50</height>
-         </size>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <spacer name="horizontalSpacer_4">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
       </item>
      </layout>
     </item>

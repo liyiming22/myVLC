@@ -42,8 +42,10 @@ private:
     QPoint mouse;
     QPoint win;
 
+
 protected:
     bool eventFilter(QObject *, QEvent *);
+
 
 signals:
     void open_local_files();

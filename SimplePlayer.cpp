@@ -86,6 +86,7 @@ void SimplePlayer::changePlayIcon(bool isPlaying)
     }
 }
 
+
 void SimplePlayer::changeModeIcon(QString mode)
 {
     QString iconPath = ":/new/player of icon/image/" + mode + ".ico";
@@ -105,3 +106,4 @@ bool SimplePlayer::eventFilter(QObject * target, QEvent * event)
     }
     return QMainWindow::eventFilter(target, event);
 }
+

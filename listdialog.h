@@ -7,7 +7,7 @@
 #include <QFileDialog>
 #include <QTextCodec>
 #include <QSet>
-
+#include<QMouseEvent>
 #include <dirent.h>
 #include <unistd.h>
 #include <sys/stat.h>
@@ -48,10 +48,13 @@ public slots:
 private:
     Ui::listDialog *ui;
     QPoint record;
-
+    QPoint mLastMousePosition;
     GroupList *currentList;
 
     addDialog *addWidget;
+protected:
+    void mouseMoveEvent(QMouseEvent* event);
+    void mousePressEvent(QMouseEvent* event);
 };
 
 #endif // LISTDIALOG_H

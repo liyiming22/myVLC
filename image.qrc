@@ -18,5 +18,11 @@
         <file>image/Shuffle.ico</file>
         <file>image/vlc.png</file>
         <file>image/vlc-qt.png</file>
+        <file>image/壁纸.jpg</file>
+        <file>image/浏览.ico</file>
+        <file>image/减少.ico</file>
+        <file>image/添加.ico</file>
+        <file>image/减少1.ico</file>
+        <file>image/添加1.ico</file>
     </qresource>
 </RCC>
