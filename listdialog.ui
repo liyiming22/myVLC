@@ -21,97 +21,245 @@ background-image: url(:/new/player of icon/image/壁纸.jpg);
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <item>
-      <widget class="QTreeWidget" name="treeWidget">
-       <column>
-        <property name="text">
-         <string>列表</string>
-        </property>
-       </column>
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="currentIndex">
+      <number>1</number>
+     </property>
+     <widget class="QWidget" name="tab_3">
+      <property name="toolTip">
+       <string/>
+      </property>
+      <property name="accessibleName">
+       <string/>
+      </property>
+      <attribute name="title">
+       <string>播放列表</string>
+      </attribute>
+      <widget class="QWidget" name="">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>287</width>
+         <height>661</height>
+        </rect>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <widget class="QTreeWidget" name="treeWidget">
+          <column>
+           <property name="text">
+            <string>列表</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QPushButton" name="addButton">
+            <property name="maximumSize">
+             <size>
+              <width>25</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="image.qrc">
+              <normaloff>:/new/player of icon/image/添加1.ico</normaloff>:/new/player of icon/image/添加1.ico</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>25</width>
+              <height>25</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="removeButton">
+            <property name="maximumSize">
+             <size>
+              <width>25</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="image.qrc">
+              <normaloff>:/new/player of icon/image/减少1.ico</normaloff>:/new/player of icon/image/减少1.ico</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>25</width>
+              <height>25</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="scanButton">
+            <property name="text">
+             <string>scan</string>
+            </property>
+            <property name="icon">
+             <iconset resource="image.qrc">
+              <normaloff>:/new/player of icon/image/浏览.ico</normaloff>:/new/player of icon/image/浏览.ico</iconset>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
       </widget>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <item>
-        <widget class="QPushButton" name="addButton">
-         <property name="maximumSize">
-          <size>
-           <width>25</width>
-           <height>25</height>
-          </size>
-         </property>
-         <property name="focusPolicy">
-          <enum>Qt::NoFocus</enum>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="icon">
-          <iconset resource="image.qrc">
-           <normaloff>:/new/player of icon/image/添加1.ico</normaloff>:/new/player of icon/image/添加1.ico</iconset>
-         </property>
-         <property name="iconSize">
-          <size>
-           <width>25</width>
-           <height>25</height>
-          </size>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="removeButton">
-         <property name="maximumSize">
-          <size>
-           <width>25</width>
-           <height>25</height>
-          </size>
-         </property>
-         <property name="focusPolicy">
-          <enum>Qt::NoFocus</enum>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="icon">
-          <iconset resource="image.qrc">
-           <normaloff>:/new/player of icon/image/减少1.ico</normaloff>:/new/player of icon/image/减少1.ico</iconset>
-         </property>
-         <property name="iconSize">
-          <size>
-           <width>25</width>
-           <height>25</height>
-          </size>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QPushButton" name="scanButton">
-         <property name="text">
-          <string>scan</string>
-         </property>
-         <property name="icon">
-          <iconset resource="image.qrc">
-           <normaloff>:/new/player of icon/image/浏览.ico</normaloff>:/new/player of icon/image/浏览.ico</iconset>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-    </layout>
+     </widget>
+     <widget class="QWidget" name="tab_4">
+      <attribute name="title">
+       <string>TCP客户端</string>
+      </attribute>
+      <widget class="QLabel" name="label">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>40</y>
+         <width>64</width>
+         <height>19</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>主机</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_2">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>80</y>
+         <width>64</width>
+         <height>19</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>端口</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="hostLineEdit">
+       <property name="geometry">
+        <rect>
+         <x>60</x>
+         <y>40</y>
+         <width>211</width>
+         <height>27</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>localhost</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="portLineEdit">
+       <property name="geometry">
+        <rect>
+         <x>60</x>
+         <y>80</y>
+         <width>211</width>
+         <height>27</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>8888</string>
+       </property>
+      </widget>
+      <widget class="QProgressBar" name="progressBar">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>130</y>
+         <width>251</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="value">
+        <number>24</number>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_3">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>370</y>
+         <width>64</width>
+         <height>19</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>连接中......</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="downloadBtn">
+       <property name="geometry">
+        <rect>
+         <x>70</x>
+         <y>180</y>
+         <width>87</width>
+         <height>27</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>下载</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="openBtn">
+       <property name="geometry">
+        <rect>
+         <x>70</x>
+         <y>240</y>
+         <width>87</width>
+         <height>27</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>打开</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="uploadBtn">
+       <property name="geometry">
+        <rect>
+         <x>70</x>
+         <y>300</y>
+         <width>87</width>
+         <height>27</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>上传</string>
+       </property>
+      </widget>
+     </widget>
+    </widget>
    </item>
   </layout>
  </widget>
