@@ -7,25 +7,35 @@ listDialog::listDialog(QWidget *parent) :
 {
    ui->setupUi(this);
    setWindowFlags(Qt::FramelessWindowHint);
+//   QTextCodec::setCodecForLocale(QTextCodec::codecForName("GBK"));
+   addWidget = new addDialog(this);
+   ui->addButton->setFlat(true);
+   ui->removeButton->setFlat(true);
+   ui->uploadBtn->setEnabled(false);
 //    setWindowFlags(Qt::Tool | Qt::FramelessWindowHint);
 //    setAttribute(Qt::WA_TranslucentBackground);
 
     mediaFormat << "mp3" << "wav" << "mp4" << "3gp" << "webm"
                 << "mkv" << "avi";
-
     currentList = new GroupList();
-    QTextCodec::setCodecForLocale(QTextCodec::codecForName("GBK"));
-
     ChannelGroup *group = new ChannelGroup();
     group->setName("Default");
     currentList->addGroup(group);
     refreshList();
 
-    addWidget = new addDialog(this);
+    loadSize = 4*1024;
+    totalBytes = 0;
+    bytesWritten = 0;
+    bytesToWrite = 0;
+    bytesReceived = 0;
+    fileNameSize = 0;
+    flagDown = false;
+    recvPath = "/home/yeoman/";
 
-    ui->addButton->setFlat(true);
-    ui->removeButton->setFlat(true);
-
+    tcpClient = new QTcpSocket(this);
+//    tcpClient->connectToHost(ui->hostLineEdit->text(), ui->portLineEdit->text().toInt());
+//    tcpClient->connectToHost("10.16.23.54", 8888);
+    tcpClient->connectToHost(QHostAddress::LocalHost, 6666);
 
     connect(ui->treeWidget, &QTreeWidget::itemDoubleClicked, this, &listDialog::selectChannel);
     connect(ui->addButton, &QPushButton::clicked, addWidget, &addDialog::show);
@@ -34,6 +44,10 @@ listDialog::listDialog(QWidget *parent) :
 
     connect(addWidget, &addDialog::addGroupOrChannel, this, &listDialog::addGroupOrChannel);
     connect(addWidget, &addDialog::addFromFile, this, &listDialog::addFromFile);
+
+    connect(tcpClient, &QTcpSocket::connected, this, &listDialog::acceptConnection);
+    connect(ui->openBtn, &QPushButton::clicked, this, &listDialog::openFile);
+    connect(ui->uploadBtn, &QPushButton::clicked, this, &listDialog::send);
 }
 
 listDialog::~listDialog()
@@ -41,6 +55,153 @@ listDialog::~listDialog()
     delete currentList;
     delete addWidget;
     delete ui;
+}
+
+void listDialog::acceptConnection()
+{
+//  refresh the progress
+    connect(tcpClient, &QTcpSocket::readyRead, this, &listDialog::updateServerProgress);
+    connect(tcpClient, &QTcpSocket::bytesWritten, this, &listDialog::updateClientProgress);
+//    connect(tcpClient, &QTcpSocket::error, this, &listDialog::displayError);
+    connect(tcpClient,SIGNAL(error(QAbstractSocket::SocketError)),
+            this, SLOT(displayError(QAbstractSocket::SocketError)));
+    ui->statusLabel->setText("connect test...");
+    qDebug() << "connect success!";
+}
+
+void listDialog::openFile()
+{
+    fileName = QFileDialog::getOpenFileName(this);
+    if(!fileName.isEmpty()) {
+        ui->uploadBtn->setEnabled(true);
+        ui->statusLabel->setText("打开文件成功");
+    }
+}
+
+void listDialog::send()
+{
+    ui->uploadBtn->setEnabled(false);
+    bytesWritten = 0;
+    startTransfer();
+}
+
+void listDialog::startTransfer()
+{
+    if(!fileName.isEmpty()) {
+        ui->uploadBtn->setEnabled(false);
+        localFile = new QFile(fileName);
+        if(!localFile->open(QFile::ReadOnly)) {
+            qDebug() << "open file error";
+            return;
+        }
+        totalBytes = localFile->size();
+        QDataStream sendOut(&outBlock, QIODevice::WriteOnly);
+        sendOut.setVersion(QDataStream::Qt_5_11);
+        QString currentFileName = fileName.right(fileName.size() - fileName.lastIndexOf('/') - 1);
+        sendOut << qint64(0) << qint64(0) << currentFileName;
+        totalBytes += outBlock.size();
+        sendOut.device()->seek(0);
+        sendOut << totalBytes << qint64((outBlock.size() - sizeof(qint64) * 2));
+        bytesToWrite = totalBytes - tcpClient->write(outBlock);
+        ui->statusLabel->setText("已连接");
+
+    }
+    else    qDebug() << "empty file";
+//    outBlock.resize(0);
+}
+
+void listDialog::updateClientProgress(qint64 numBytes)
+{
+    if(flagDown == true)
+    {
+        flagDown = false;
+        return ;
+    }
+
+    bytesWritten += (int)numBytes;
+    if(bytesToWrite > 0)
+    {
+        outBlock = localFile->read(qMin(bytesToWrite,loadSize));
+        bytesToWrite -= (int)tcpClient->write(outBlock);
+        outBlock.resize(0);
+    }else{
+        localFile->close();
+    }
+
+    ui->clientProgressBar->setMaximum(totalBytes);
+    ui->clientProgressBar->setValue(bytesWritten);
+    if(bytesWritten == totalBytes)
+    {
+        ui->statusLabel->setText(tr("传送文件 %1 成功").arg(fileName));
+        localFile->close();
+        totalBytes = 0;
+        bytesWritten = 0;
+        bytesToWrite = 0;
+        ui->clientProgressBar->setValue(0);
+    }
+}
+
+void listDialog::updateServerProgress()
+{
+    QDataStream in(tcpClient);
+    in.setVersion(QDataStream::Qt_5_11);
+
+    if(bytesReceived <= sizeof(qint64)*2)
+    {
+        if((tcpClient->bytesAvailable() >=
+            sizeof(qint64)*2) && (fileNameSize == 0))
+        {
+            in >> totalBytes >> fileNameSize;
+            bytesReceived += sizeof(qint64) * 2;
+        }
+        if((tcpClient->bytesAvailable()
+            >= fileNameSize) && (fileNameSize != 0))
+            {
+            in >> fileName;
+            ui->statusLabel->setText(tr("接收文件 %1 …")
+                                           .arg(fileName));
+            bytesReceived += fileNameSize;
+            localFile = new QFile(fileName);
+            qDebug() << fileName;
+//            localFile = new QFile(recvPath);
+            if(!localFile->open(QFile::WriteOnly))
+            {
+                qDebug() << "open file error!";
+                return;
+            }
+        } else
+            return;
+    }
+
+    if(bytesReceived < totalBytes)
+    {
+        bytesReceived += tcpClient->bytesAvailable();
+        inBlock = tcpClient->readAll();
+        localFile->write(inBlock);
+        inBlock.resize(0);
+    }
+
+    ui->clientProgressBar->setMaximum(totalBytes);
+    ui->clientProgressBar->setValue(bytesReceived);
+    if(bytesReceived == totalBytes)
+    {
+        localFile->close();
+        //ui->sendButton->setEnabled(true);
+        ui->statusLabel->setText(tr("接收文件 %1 成功！")
+                                       .arg(fileName));
+        bytesReceived = 0;
+        fileNameSize = 0;
+        totalBytes = 0;
+    }
+}
+
+void listDialog::displayError(QAbstractSocket::SocketError)
+{
+    qDebug() << tcpClient->errorString();
+    tcpClient->close();
+    ui->clientProgressBar->reset();
+    ui->statusLabel->setText(tr("客户端就绪"));
+    ui->uploadBtn->setEnabled(true);
 }
 
 void listDialog::refreshList()
