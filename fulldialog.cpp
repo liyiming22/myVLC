@@ -111,7 +111,7 @@ bool fullDialog::eventFilter(QObject *target, QEvent *event)
                 QPropertyAnimation *animation = new QPropertyAnimation(ui->ctrlWidget, "pos");
                 animation->setDuration(200);
                 animation->setStartValue(ui->ctrlWidget->pos());
-                animation->setEndValue(QPoint(0, fHeight-1));
+                animation->setEndValue(QPoint(0, fHeight - 1));
                 animation->start();
 //                sleep(0.2);
                 isHide = true;
