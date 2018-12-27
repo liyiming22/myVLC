@@ -57,6 +57,27 @@ listDialog::~listDialog()
     delete ui;
 }
 
+void listDialog::mouseMoveEvent(QMouseEvent *event)
+{
+    this->move(event->globalPos()+ mLastMousePosition);
+
+}
+
+void listDialog::mousePressEvent(QMouseEvent *event)
+{
+    mLastMousePosition =this->pos()-event->globalPos();
+}
+
+void listDialog::recordPos()
+{
+    record = this->pos();
+}
+
+void listDialog::moveDif(QPoint dif)
+{
+    this->move(record + dif);
+}
+
 void listDialog::acceptConnection()
 {
 //  refresh the progress
@@ -219,16 +240,6 @@ void listDialog::refreshList()
     }
 }
 
-void listDialog::recordPos()
-{
-    record = this->pos();
-}
-
-void listDialog::moveDif(QPoint dif)
-{
-    this->move(record + dif);
-}
-
 void listDialog::selectChannel(QTreeWidgetItem *item, int index)
 {
 //    qDebug() << "selected" << endl;
@@ -367,15 +378,4 @@ void listDialog::scanDirectory()
     int temp = qstr.lastIndexOf('/');
     qstr = qstr.mid(temp + 1);
     addFromFile(fileList, qstr);
-}
-
-void listDialog::mouseMoveEvent(QMouseEvent *event)
-{
-    this->move(event->globalPos()+ mLastMousePosition);
-
-}
-
-void listDialog::mousePressEvent(QMouseEvent *event)
-{
-    mLastMousePosition =this->pos()-event->globalPos();
 }

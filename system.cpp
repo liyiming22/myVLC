@@ -14,6 +14,9 @@ System::System(QObject *parent) : QObject(parent)
     _fullPlayer = new VlcMediaPlayer(_instance);
     _player->setVideoWidget(videoForm->getUI()->video);
     _mediaList = new VlcMediaList(_instance);
+    m_spectrum_analyzer = nullptr;
+    qplayer = nullptr;
+    probe = nullptr;
     currentMediaIndex = 0;
     preMediaIndex = 0;
     nextMediaIndex = 0;
@@ -202,12 +205,14 @@ void System::openLocal()
                                          "Multimedia files(*)");
     if ( 0 == playList.length() )    return;
 
-    for ( int index = 0; index < playList.length(); ++index ) {
-        _media = new VlcMedia(playList.at(index), true, _instance);
-        _mediaList->addMedia(_media);
-    }
-    initPlayer();
-    _player->open(_mediaList->at(currentMediaIndex));
+    listForm->addFromFile(playList, "Local");
+
+//    for ( int index = 0; index < playList.length(); ++index ) {
+//        _media = new VlcMedia(playList.at(index), true, _instance);
+//        _mediaList->addMedia(_media);
+//    }
+//    initPlayer();
+//    _player->open(_mediaList->at(currentMediaIndex));
 }
 
 void System::openUrl()
@@ -232,7 +237,14 @@ void System::listPlay(ChannelGroup *group, int index)
     }
     initPlayer();
     currentMediaIndex = index;
-    _player->open(_mediaList->at(currentMediaIndex));
+    if (group->getChannel(index)->getFormat() == "mp3") {
+        qplayer = new QMediaPlayer;
+        probe = new QAudioProbe;
+        qplayer->setMedia(QUrl :: fromLocalFile(group->getChannel(index)->getAddress()));
+        probe->setSource(qplayer);
+        qplayer->play();
+    }
+    else    _player->open(_mediaList->at(currentMediaIndex));
 //    updateNextandPre();
     qDebug() << _mediaList->count();
 }

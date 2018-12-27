@@ -4,6 +4,9 @@ Channel::Channel(QString name, QString address)
 {
     this->name = name;
     this->address = address;
+    int temp = address.lastIndexOf('.');
+    this->format = address.mid(temp + 1);
+    qDebug() << this->format;
 }
 
 void Channel::setChannel(QString channel)
@@ -36,4 +39,9 @@ QString Channel::getName()
 QString Channel::getAddress()
 {
     return address;
+}
+
+QString Channel::getFormat()
+{
+    return format;
 }

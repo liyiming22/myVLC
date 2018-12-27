@@ -23,6 +23,8 @@
 #include "SimplePlayer.h"
 #include "fulldialog.h"
 #include "listdialog.h"
+#include "barswidget.h"
+#include "spectrumanalyzer.h"
 #include "ui_SimplePlayer.h"
 #include "ui_fulldialog.h"
 
@@ -47,6 +49,7 @@ private:
     SimplePlayer * videoForm;
     fullDialog * fullForm;
     listDialog * listForm;
+    BarsWidget * bars;
 
     VlcInstance *_instance;
     VlcMedia *_media;
@@ -54,6 +57,11 @@ private:
     VlcMediaPlayer *_fullPlayer;
     VlcAudio * _vlcAudio;
     VlcVideo * _vlcVideo;
+
+    QMediaPlayer * qplayer;
+    QAudioProbe * probe;
+
+    SpectrumAnalyzer * m_spectrum_analyzer;
 
     VlcMediaList * _mediaList;
     QStringList playList;
