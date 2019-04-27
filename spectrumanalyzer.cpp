@@ -17,7 +17,7 @@ SpectrumAnalyzer::~SpectrumAnalyzer()
 }
 
 void SpectrumAnalyzer::calculateSpectrum(QAudioBuffer buf)
-{   
+{
     int sampleRate = buf.format().sampleRate();
     QAudioBuffer :: S16S * samples = buf.data<QAudioBuffer :: S16S>();
     m_spectrum.clear();
@@ -58,12 +58,14 @@ void SpectrumAnalyzer::calculateSpectrum(QAudioBuffer buf)
 
         const float thisMagnitude = float(qSqrt(qreal(real * real + imag * imag)));
         float thisAmplitude = SpectrumAnalyserMultiplier * float(qLn(qreal(thisMagnitude)));
-
+        qDebug() << thisSP.frequency << "\t" << thisAmplitude;
         // Bound amplitude to [0, 1]
-        thisAmplitude = qBound(float(0), thisAmplitude, float(1));
+//        if (thisAmplitude > 1)  thisAmplitude -= 1;
+//        else if (thisAmplitude < 0)   thisAmplitude = 0;
+//        thisAmplitude = qBound(float(0), thisAmplitude, float(1));
         thisSP.amplitude = thisAmplitude;
         m_spectrum.push_back(thisSP);
-        qDebug() << thisSP.frequency << "\t" << thisSP.amplitude;
+//        qDebug() << thisSP.frequency << "\t" << thisSP.amplitude;
     }
     emit spectrumChanged(m_spectrum);
 }

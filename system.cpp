@@ -5,6 +5,8 @@ System::System(QObject *parent) : QObject(parent)
     videoForm = new SimplePlayer;
     fullForm = new fullDialog;
     listForm = new listDialog;
+    bars = new BarsWidget;
+    bars->setMinimumHeight(300);
     videoForm->move(550, 350);
     videoForm->show();
     listFromVideo();
@@ -105,8 +107,6 @@ void System::changeChannel(bool isNext)
     currentMediaIndex = isNext? nextMediaIndex:preMediaIndex;
     initPlayer();
     _player->open(_mediaList->at(currentMediaIndex));
-//    _fullPlayer->open(_mediaList->at(currentMediaIndex));
-//    updateNextandPre();
 }
 
 void System::changePos(bool isNext)
@@ -206,13 +206,6 @@ void System::openLocal()
     if ( 0 == playList.length() )    return;
 
     listForm->addFromFile(playList, "Local");
-
-//    for ( int index = 0; index < playList.length(); ++index ) {
-//        _media = new VlcMedia(playList.at(index), true, _instance);
-//        _mediaList->addMedia(_media);
-//    }
-//    initPlayer();
-//    _player->open(_mediaList->at(currentMediaIndex));
 }
 
 void System::openUrl()
@@ -238,11 +231,23 @@ void System::listPlay(ChannelGroup *group, int index)
     initPlayer();
     currentMediaIndex = index;
     if (group->getChannel(index)->getFormat() == "mp3") {
+//        videoForm->getUI()->verticalLayout->addWidget(bars);
+        bars->show();
         qplayer = new QMediaPlayer;
         probe = new QAudioProbe;
         qplayer->setMedia(QUrl :: fromLocalFile(group->getChannel(index)->getAddress()));
         probe->setSource(qplayer);
         qplayer->play();
+        m_spectrum_analyzer = new SpectrumAnalyzer;
+//        QThread * thread = new QThread;
+//        m_spectrum_analyzer->moveToThread(thread);
+
+        connect(probe, &QAudioProbe::audioBufferProbed, m_spectrum_analyzer, &SpectrumAnalyzer::calculateSpectrum);
+        connect(m_spectrum_analyzer, &SpectrumAnalyzer::spectrumChanged, bars, &BarsWidget::setValues);
+        connect(m_spectrum_analyzer, &SpectrumAnalyzer::destroyed, bars, &BarsWidget::clear);
+//        connect(this, &Widget::destroyed, m_spectrum_analyzer, &SpectrumAnalyzer::deleteLater);
+//        connect(m_spectrum_analyzer, &SpectrumAnalyzer::destroyed, thread, &QThread::quit);
+//        connect(thread, &QThread::finished, thread, &QThread::deleteLater);
     }
     else    _player->open(_mediaList->at(currentMediaIndex));
 //    updateNextandPre();

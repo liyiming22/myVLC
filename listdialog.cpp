@@ -33,9 +33,6 @@ listDialog::listDialog(QWidget *parent) :
     recvPath = "/home/yeoman/";
 
     tcpClient = new QTcpSocket(this);
-//    tcpClient->connectToHost(ui->hostLineEdit->text(), ui->portLineEdit->text().toInt());
-//    tcpClient->connectToHost("10.16.23.54", 8888);
-    tcpClient->connectToHost(QHostAddress::LocalHost, 6666);
 
     connect(ui->treeWidget, &QTreeWidget::itemDoubleClicked, this, &listDialog::selectChannel);
     connect(ui->addButton, &QPushButton::clicked, addWidget, &addDialog::show);
@@ -46,6 +43,7 @@ listDialog::listDialog(QWidget *parent) :
     connect(addWidget, &addDialog::addFromFile, this, &listDialog::addFromFile);
 
     connect(tcpClient, &QTcpSocket::connected, this, &listDialog::acceptConnection);
+    connect(ui->connectBtn, &QPushButton::clicked, this, &listDialog::connectTOHost);
     connect(ui->openBtn, &QPushButton::clicked, this, &listDialog::openFile);
     connect(ui->uploadBtn, &QPushButton::clicked, this, &listDialog::send);
 }
@@ -76,6 +74,12 @@ void listDialog::recordPos()
 void listDialog::moveDif(QPoint dif)
 {
     this->move(record + dif);
+}
+
+void listDialog::connectTOHost()
+{
+    tcpClient->connectToHost(ui->hostLineEdit->text(), ui->portLineEdit->text().toInt());
+//    tcpClient->connectToHost(QHostAddress::LocalHost, 6666);
 }
 
 void listDialog::acceptConnection()

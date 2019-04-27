@@ -51,6 +51,7 @@ public slots:
     void scanDirectory();
 
 //    服务器客户端相关
+    void connectTOHost();
     void acceptConnection();
     void send(); //连接服务器
     void startTransfer(); //发送文件大小等信息

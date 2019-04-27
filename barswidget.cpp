@@ -64,7 +64,8 @@ void BarsWidget::paintEvent(QPaintEvent *event)
 
     float w = float(qFloor(width() / qreal(barscount) - 1));
 
-    float h = height();
+//    float h = height();
+    float h = 150.0;
 
     QPainter painter(this);
 
@@ -72,10 +73,10 @@ void BarsWidget::paintEvent(QPaintEvent *event)
 
     int pos = int(width() - ((w + 1) * barscount)) / 2 + 1;
 
-    for (int i = 0; i < barscount; i++)
-    {
+    for (int i = 0; i < barscount; i++) {
         float value = m_bars[i];
-        painter.fillRect(pos, int(h - (value * h)), int(w - 2), int(value * h), Qt::yellow);
+//        painter.fillRect(pos, int(h - (value * h)), int(w - 2), int(value * h), Qt::yellow);
+        painter.fillRect(pos, int(height() - (value * h)), int(w - 2), int(value * h), Qt::yellow);
         pos += w + 1;
     }
 
