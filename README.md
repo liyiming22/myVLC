@@ -2,7 +2,7 @@
 
 一个使用Qt构建的Linux下流媒体播放器
 
-**该仓库仅仅是桌面端GUI，另外的简单Web管理端见：<https://github.com/YeomanLi/MediaWebsite>**
+**该仓库仅仅是桌面端GUI程序，另外的简单Web管理端见：<https://github.com/YeomanLi/MediaWebsite>**
 
 我自己测试的Linux发行版：[Ubuntu 18.10](http://www.ubuntu.org.cn/download)、[Arch Linux](https://www.archlinux.org/)
 
@@ -61,7 +61,6 @@
 - [x] 全屏下动态显示播放控件
 - [x] 局域网传输媒体
 - [x] **实时显示音频频谱**
-- [ ] 
 - [ ] 编译打包
 
 ## 简述
